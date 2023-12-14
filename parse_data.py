@@ -18,7 +18,7 @@ import numpy as np
 from scipy.sparse import spdiags, csr_matrix, find, issparse, coo_matrix
 from scipy.sparse.linalg import spilu
 from scipy.io import savemat
-from sklearn.cluster import DBSCAN
+from sklearn.metrics import pairwise_distances
 
 
 def supernode(A, c):
@@ -149,7 +149,11 @@ def DBSCAN(X, epsilon, MinPts):
     n = X.shape[0]
     IDX = np.zeros(n, dtype=int)
 
-    D = np.linalg.norm(X - X[:, np.newaxis], axis=-1)
+    # calculate the Euclidean distances between all points in the dataset X
+    # the original line
+    D1 = np.linalg.norm(X - X[:, np.newaxis], axis=-1)
+    # improvement
+    D = pairwise_distances(X, metric='euclidean')
 
     visited = np.zeros(n, dtype=bool)
     isnoise = np.zeros(n, dtype=bool)
@@ -200,7 +204,7 @@ def remove_lone_nodes(a):
 
 if __name__ == '__main__':
     # input_file_path = r'C:\Users\Hanil\Coding\Miscgan\Dataset\email-Eu-core.txt'
-    input_file_path = r'C:\Users\Hanil\Coding\final-project\Miscgan\Dataset\cora.txt'
+    input_file_path = r'C:\Users\yanar\miscgan_final\Miscgan\Dataset\email-Eu-core.txt'
 
     a = np.loadtxt(input_file_path, dtype=int)  # Read the edges from the text file
     a = remove_lone_nodes(a)
@@ -225,6 +229,5 @@ if __name__ == '__main__':
     # Extract edges between supernodes
     edges = supernode(A, c)
     c = [[x + 1 for x in a] for a in c]
-    # data = {'A': A, 'P': P, 'W': W, 'R': R, 'IDX': indices, 'edges': edges, 'c': c}
     data = {'A': A, 'P': P, 'W': W, 'R': R, 'IDX': indices, 'edges': edges, 'c': c}
-    savemat(r'C:\Users\Hanil\Coding\Miscgan\data\email-python.mat', data)
+    savemat(r'C:\Users\yanar\miscgan_final\Miscgan\data\cora.mat', data)

@@ -14,21 +14,21 @@ def main(_):
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--demo', dest='demo', action='store_true', help='Demo')
     # parser.add_argument('--dataset_A', dest='dataset_A', default='corsegraph_bitcoin.mat', help='path of the data set')
-    # parser.add_argument('--dataset_A', dest='dataset_A', default='email-Eu-core.mat', help='path of the data set')
+    #parser.add_argument('--dataset_A', dest='dataset_A', default='email-Eu-core.mat', help='path of the data set')
     # parser.add_argument('--dataset_A', dest='dataset_A', default='old_cora.mat', help='p`ath of the data set')
-    parser.add_argument('--dataset_A', dest='dataset_A', default='email-python.mat', help='path of the data set')
-    parser.add_argument('--parse_data_lang', dest='parse_data_lang', default='python', help='In what language did the parse_data program run?')
+    parser.add_argument('--dataset_A', dest='dataset_A', default='cora.mat', help='path of the data set')
+    # parser.add_argument('--parse_data_lang', dest='parse_data_lang', default='python', help='In what language did the parse_data program run?')
     # parser.add_argument('--dataset_A', dest='dataset_A', default='matlab-email.mat', help='path of the data set')
     # parser.add_argument('--checkpoint', dest='checkpoint', default='./checkpoint_email', help='path of the checkpoint')
-    parser.add_argument('--checkpoint', dest='checkpoint', default='./checkpoint_bloo', help='path of the checkpoint')
+    parser.add_argument('--checkpoint', dest='checkpoint', default='./checkpoint_training_cora', help='path of the checkpoint')
     # parser.add_argument('--filename', dest='filename', default='output_network', help='the filename of output network')
-    parser.add_argument('--filename', dest='filename', default='bloo_output_network', help='the filename of output network')
+    parser.add_argument('--filename', dest='filename', default='cora_output_network', help='the filename of output network')
     parser.add_argument('--epoch', dest='epoch', type=int, default=250, help='# of epoch')
     parser.add_argument('--layer', dest='layer', type=int, default=5, help='# of layer')
     parser.add_argument('--clusters', dest='clusters', type=int, default=2, help='# of clusters, 2 or 3')
     # parser.add_argument('--output_dir', dest='output_dir', default='./output_dir_email', help='results are saved here')
     # parser.add_argument('--output_dir', dest='output_dir', default='./output_dir_cora', help='results are saved here')
-    parser.add_argument('--output_dir', dest='output_dir', default='./output_dir_asdg', help='results are saved here')
+    parser.add_argument('--output_dir', dest='output_dir', default='./output_dir_cora', help='results are saved here')
     parser.add_argument('--use_resnet', dest='use_resnet', type=str, default=True,
                         help='generation network using reidule block')
     parser.add_argument('--use_lsgan', dest='use_lsgan', default=True, help='gan loss defined in lsgan')
@@ -53,7 +53,8 @@ def main(_):
         args.output_dir= './output_dir_email'
     # --- initialization --- #
     tfconfig = tf.ConfigProto(allow_soft_placement=True)
-    tfconfig.gpu_options.allow_growth = True
+    tfconfig.gpu_options.allow_growth = False
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
     if args.gpu:
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     if args.which_stage == 'training':
