@@ -189,11 +189,21 @@ def DBSCAN(X, epsilon, MinPts):
     return IDX, isnoise
 
 
+def remove_lone_nodes(a):
+    """Renumbers nodeIDs in order to minimize and optimize the original edges file"""
+    flat_values = np.unique(np.sort(a.flatten()))
+    x = {value: i for i, value in enumerate(flat_values)}
+    for key, value in x.items():
+        a[a == key] = value
+    return a
+
+
 if __name__ == '__main__':
     # input_file_path = r'C:\Users\Hanil\Coding\Miscgan\Dataset\email-Eu-core.txt'
-    input_file_path = r'C:\Users\Hanil\Coding\Miscgan\Dataset\email-Eu-core2.txt'
+    input_file_path = r'C:\Users\Hanil\Coding\final-project\Miscgan\Dataset\cora.txt'
 
     a = np.loadtxt(input_file_path, dtype=int)  # Read the edges from the text file
+    a = remove_lone_nodes(a)
     n = np.max(a) + 1  # Find the maximum element in the entire array and add 1
     A = np.zeros((n, n), dtype=int)
 
@@ -204,7 +214,6 @@ if __name__ == '__main__':
 
     # Convert the adjacency matrix to a sparse matrix
     A_sparse = csr_matrix(A.transpose()).transpose()
-    # TODO: change NS=5
     P, R, W, c = AMG(fW=A_sparse, beta=0.2, NS=5)
 
     # Apply AMG clustering
