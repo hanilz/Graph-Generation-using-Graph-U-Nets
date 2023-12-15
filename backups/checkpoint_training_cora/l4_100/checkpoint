@@ -1,0 +1,3 @@
+model_checkpoint_path: "cyclegan.model"
+all_model_checkpoint_paths: "..\\l4_50\\cyclegan.model"
+all_model_checkpoint_paths: "cyclegan.model"
